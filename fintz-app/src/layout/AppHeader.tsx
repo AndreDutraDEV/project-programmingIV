@@ -121,7 +121,7 @@ const AppHeader: React.FC = () => {
           </button>
 
           <div className="hidden lg:block">
-            <form>
+            {/* <form>
               <div className="relative">
                 <span className="absolute -translate-y-1/2 left-4 top-1/2 pointer-events-none">
                   <svg
@@ -152,7 +152,7 @@ const AppHeader: React.FC = () => {
                   <span> K </span>
                 </button>
               </div>
-            </form>
+            </form> */}
           </div>
         </div>
         <div
@@ -165,11 +165,14 @@ const AppHeader: React.FC = () => {
             <ThemeToggleButton />
             {/* <!-- Dark Mode Toggler --> */}
 
-           <NotificationDropdown /> 
+           {/* <NotificationDropdown />  */}
+
             {/* <!-- Notification Menu Area --> */}
+
           </div>
+
           {/* <!-- User Area --> */}
-          <UserDropdown /> 
+          {/* <UserDropdown />  */}
     
         </div>
       </div>
