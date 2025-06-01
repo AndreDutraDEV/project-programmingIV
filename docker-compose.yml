@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  web:
+    build: ./fintz-app
+    ports:
+      - "3300:3000"
+    environment:
+      - NODE_ENV=production
