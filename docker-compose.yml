@@ -1,9 +1,19 @@
 version: '3'
 
 services:
-  web:
-    build: ./fintz-app
+  # web:
+  #   build: ./fintz-app
+  #   ports:
+  #     - "3300:3000"
+  #   environment:
+  #     - NODE_ENV=production
+
+  api:
+    build: ./fintz-api
     ports:
-      - "3300:3000"
-    environment:
-      - NODE_ENV=production
+      - "5000:5000"
+    env_file:
+      - ./fintz-api/.env
+    # volumes:
+    #   - .:/app  # Para desenvolvimento (opcional)
+    restart: on-failure

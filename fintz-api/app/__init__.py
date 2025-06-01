@@ -5,7 +5,6 @@ from flask_jwt_extended import JWTManager
 from app.routes.user_routes import user_bp
 from app.config import Config
 
-
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
