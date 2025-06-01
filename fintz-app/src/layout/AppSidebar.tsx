@@ -17,6 +17,7 @@ import {
   TableIcon,
   UserCircleIcon,
 } from "../icons/index";
+
 import SidebarWidget from "./SidebarWidget";
 
 type NavItem = {
@@ -374,7 +375,7 @@ const AppSidebar: React.FC = () => {
             </div>
           </div>
         </nav>
-        {isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null}
+        {/* {isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null} */}
       </div>
     </aside>
   );
