@@ -8,12 +8,40 @@ services:
   #   environment:
   #     - NODE_ENV=production
 
+  postgres:
+    image: postgres:16
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: jarvitz
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: jarvitzdatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./fintz-database/init:/docker-entrypoint-initdb.d
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "8083:80"
+    depends_on:
+      - postgres
+
+
   api:
     build: ./fintz-api
     ports:
       - "5000:5000"
     env_file:
       - ./fintz-api/.env
-    # volumes:
-    #   - .:/app  # Para desenvolvimento (opcional)
     restart: on-failure
+
+volumes:
+  pgdata:

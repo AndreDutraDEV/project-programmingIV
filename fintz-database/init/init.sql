@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS users (
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     cell VARCHAR(20),
+    password BYTEA NOT NULL,
     date_registered TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

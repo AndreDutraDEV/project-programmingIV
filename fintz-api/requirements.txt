@@ -5,3 +5,6 @@ pydantic
 psycopg[binary]
 python-dotenv
 pydantic[email]
+psycopg
+bcrypt
+marshmallow

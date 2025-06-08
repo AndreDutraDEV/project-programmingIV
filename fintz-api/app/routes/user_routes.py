@@ -1,42 +1,28 @@
-from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, jwt_required
 
-from app.schemas.user_schema import UserLoginSchema
-from app.services.auth_service import authenticate_user
+from flask import Blueprint, request, jsonify
 from app.schemas.user_schema import UserRegisterSchema
 from app.services.user_service import create_user
+from marshmallow import ValidationError
 
-user_bp = Blueprint("user_bp", __name__)
+user_bp = Blueprint("user_routes", __name__)
 
-@user_bp.route("/login", methods=["POST"])
-def login():
-    try:
-        data = request.get_json()
-        user_data = UserLoginSchema(**data)
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
-
-    user = authenticate_user(user_data.username, user_data.password)
-    if not user:
-        return jsonify({"error": "Credenciais inválidas"}), 401
-
-    access_token = create_access_token(identity=str(user["id"]))
-    return jsonify(access_token=access_token), 200
-
-@user_bp.route("/register", methods=["POST"])
+@user_bp.route("/api/users/register", methods=["POST"])
 def register_user():
     try:
-        data = request.get_json()
-        user_data = UserRegisterSchema(**data)
-    except Exception as e:
-        return jsonify({"error": f"Dados inválidos: {str(e)}"}), 400
+        schema = UserRegisterSchema()
+        user_data = schema.load(request.json)
 
-    result = create_user(user_data.name, user_data.email, user_data.cell)
+        result = create_user(
+            name=user_data["name"],
+            email=user_data["email"],
+            cell=user_data.get("cell"),
+            password=user_data["password"]
+        )
 
-    if "error" in result:
-        return jsonify(result), 409  # Conflito (email duplicado)
-
-    return jsonify(result), 201
+        return jsonify(result), 201
+    except ValidationError as err:
+        return jsonify({"errors": err.messages}), 400
 
 @user_bp.route("/me", methods=["GET"])
 @jwt_required()
