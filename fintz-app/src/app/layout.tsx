@@ -1,24 +1,20 @@
-import { Outfit } from 'next/font/google';
+// src/app/layout.tsx
+
 import './globals.css';
+import { AuthProvider } from '@/modules/auth/interface/components/AuthProvider';
 
-import { SidebarProvider } from '@/context/SidebarContext';
-import { ThemeProvider } from '@/context/ThemeContext';
+export const metadata = {
+  title: 'Finance App',
+  description: 'Controle de transações financeiras',
+};
 
-const outfit = Outfit({
-  subsets: ["latin"],
-});
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={`${outfit.className} dark:bg-gray-900`}>
-        <ThemeProvider>
-          <SidebarProvider>{children}</SidebarProvider>
-        </ThemeProvider>
+    <html lang="pt-BR">
+      <body>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

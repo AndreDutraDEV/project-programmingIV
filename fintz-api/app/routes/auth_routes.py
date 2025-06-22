@@ -15,5 +15,5 @@ def login():
     if not user:
         return jsonify({"error": "Credenciais inválidas"}), 401
 
-    access_token = create_access_token(identity=user["id"], expires_delta=timedelta(hours=1))
+    access_token = create_access_token(identity=str(user["id"]), expires_delta=timedelta(hours=1))
     return jsonify({"access_token": access_token, "user": user})
