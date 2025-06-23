@@ -4,6 +4,7 @@ from flask_cors import CORS
 from app.config import Config
 from app.routes.user_routes import user_bp
 from app.routes.auth_routes import auth_bp
+from app.routes.finance_routes import finance_bp
 
 def create_app():
     app = Flask(__name__)
@@ -14,6 +15,7 @@ def create_app():
 
     app.register_blueprint(user_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(finance_bp)
 
     return app
 

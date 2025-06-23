@@ -18,6 +18,16 @@ def create_user(name: str, email: str, cell: str, password: str):
                     (name, email, cell, hashed_password)
                 )
                 user = cur.fetchone()
+
+                # Cria conta financeira padrão
+                cur.execute(
+                    """
+                    INSERT INTO finance_accounts (user_id, name, type, initial_balance)
+                    VALUES (%s, %s, %s, %s)
+                    """,
+                    (user[0], "Conta Principal", "checking", 0.00)
+                )
+
                 return {
                     "id": user[0],
                     "name": user[1],
