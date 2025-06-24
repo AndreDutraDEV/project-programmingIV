@@ -24,7 +24,7 @@ def register_user():
     except ValidationError as err:
         return jsonify({"errors": err.messages}), 400
 
-@user_bp.route("/me", methods=["GET"])
+@user_bp.route("/api/me", methods=["GET"])
 @jwt_required()
 def get_user():
     return jsonify({"message": "Usuário autenticado"}), 200

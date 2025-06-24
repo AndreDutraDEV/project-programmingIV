@@ -1,0 +1,1 @@
+export const TOKEN_COOKIE_KEY = 'fintz_auth_token';
