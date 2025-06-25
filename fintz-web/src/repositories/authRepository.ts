@@ -12,7 +12,6 @@ export const authRepository = {
         });
         return data;
     },
-
     async login(credentials: UserLogin): Promise<AuthResponse> {
         const data = await apiFetch('/login', {
             method: 'POST',
@@ -23,20 +22,13 @@ export const authRepository = {
         });
         return data; // Isso deve retornar { token: string, expires_at: number }
     },
-
-    async validateToken(token: string): Promise<User> {
-
-        console.log("qual tokem", token);
-        
-
+    async validateToken(token: string): Promise<User> {                
         const data = await apiFetch('/me', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
-        });
+        });        
         return data;
     },
-
-
 };

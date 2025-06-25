@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
     }
     return NextResponse.json(user);
   } catch (error: any) {
-    console.error('Erro na API /api/auth/me:', error);
+    console.error('Erro na API /api/me:', error);
     return NextResponse.json({ message: error.message || 'Erro ao validar sessão' }, { status: 500 });
   }
 }

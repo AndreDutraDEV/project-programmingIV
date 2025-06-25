@@ -6,8 +6,8 @@ export interface User {
 }
 
 export interface AuthResponse {
-  access_token: string;
-  expires_at: number; // Ou o tipo que sua API retorna para a expiração
+  access_token: string; // Mudei de 'token' para 'access_token'
+  user: User; // Ou o tipo que sua API retorna para a expiração
 }
 
 export interface UserRegister {

@@ -6,9 +6,7 @@ export async function apiFetch(
 ) {
   const url = `${API_BASE_URL}${endpoint}`;
   const response = await fetch(url, options);
-
-    console.log("asdasda", response)
-
+  
   if (!response.ok) {
     const errorData = await response.json();
     console.log("o que foi isso?", errorData);

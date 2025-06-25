@@ -39,3 +39,25 @@ def create_user(name: str, email: str, cell: str, password: str):
         return {"error": "Email já cadastrado"}
     finally:
         conn.close()
+
+def get_user_by_id(user_id: int):
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT id, name, email, cell
+                FROM users
+                WHERE id = %s
+            """, (user_id,))
+            user = cur.fetchone()
+            print("/me", user)
+            if user:
+                return {
+                    "id": int(user[0]),
+                    "name": user[1],
+                    "email": user[2],
+                    "cell": user[3]
+                }
+    finally:
+        conn.close()
+    return None
