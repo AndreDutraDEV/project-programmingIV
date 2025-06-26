@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { User, UserLogin, UserRegister } from '@/types';
+import { User, UserLogin, UserRegister, UserUpdateData } from '@/types';
 import { getToken } from '@/lib/cookies';
 
 interface AuthContextType {
@@ -12,6 +12,7 @@ interface AuthContextType {
 	register: (userData: UserRegister) => Promise<void>;
 	logout: () => void;
 	isLoading: boolean;
+	updateUser: (updatedUserData: User) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -21,6 +22,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const router = useRouter();
+
+	const updateUser = useCallback((updatedUserData: User) => {
+		setUser(updatedUserData);
+	}, []);
 
 	const checkAuthStatus = useCallback(async () => {
 		const token = localStorage.getItem('fintz_auth_token');
@@ -104,7 +109,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 	};
 
 	return (
-		<AuthContext.Provider value={{ user, isAuthenticated, login, register, logout, isLoading }}>
+		<AuthContext.Provider value={{ user, isAuthenticated, login, register, logout, isLoading, updateUser}}>
 			{children}
 		</AuthContext.Provider>
 	);

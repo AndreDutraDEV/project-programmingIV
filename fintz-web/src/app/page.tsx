@@ -3,36 +3,24 @@
 import { useAuth } from '@/hooks/useAuth';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Button from '@/components/ui/Button';
 
 export default function HomePage() {
-  const { user, isAuthenticated, isLoading, logout } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.push('/login');
+    if (!isLoading) {
+      if (!isAuthenticated) {
+        router.push('/login');
+      } else {
+        router.push('/home');
+      }
     }
   }, [isAuthenticated, isLoading, router]);
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <p>Carregando...</p>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return null; // O redirecionamento já acontece no useEffect
-  }
-
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
-      <h1 className="text-4xl font-bold mb-8 text-gray-800">Bem-vindo, {user?.name}!</h1>
-      <p className="text-lg text-gray-600 mb-4">Seu email: {user?.email}</p>
-      <p className="text-lg text-gray-600 mb-8">Seu celular: {user?.cell}</p>
-      <Button onClick={logout}>Sair</Button>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <p>Carregando...</p>
     </div>
   );
 }

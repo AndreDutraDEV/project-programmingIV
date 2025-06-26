@@ -1,5 +1,5 @@
 import { apiFetch } from '../services/api';
-import { UserLogin, UserRegister, AuthResponse, User } from '../types';
+import { UserLogin, UserRegister, AuthResponse, UserUpdateData, User } from '../types';
 
 export const authRepository = {
     async register(userData: UserRegister): Promise<User> {
@@ -7,6 +7,19 @@ export const authRepository = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData),
+        });
+        return data;
+    },
+    async updateProfile(userId: string, userData: UserUpdateData, token: string): Promise<User> {
+        // Sua API Python pode ter uma rota como /api/users/{userId} com método PUT ou PATCH
+        // Ajuste a URL e o método conforme sua API Python
+        const data = await apiFetch(`/users/${userId}`, { // Exemplo de URL
+            method: 'PUT', // Ou 'PATCH' dependendo da sua API
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify(userData),
         });

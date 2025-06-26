@@ -1,6 +1,6 @@
 import { authRepository } from '../../repositories/authRepository';
 import { TOKEN_COOKIE_KEY } from '../../lib/constants'; // Continua sendo útil para o cookie, se for usado
-import { UserLogin, UserRegister, User, AuthResponse } from '../../types';
+import { UserLogin, UserRegister, User, AuthResponse, UserUpdateData } from '../../types';
 import { NextRequest } from 'next/server'; // Para tipar `req` corretamente em validateSession
 
 export const authService = {
@@ -23,11 +23,12 @@ export const authService = {
 
     return { user: user, token: authResponse.access_token };
   },
-
   async logout(): Promise<void> {
     // A lógica de limpeza do cookie será tratada na API Route de logout.
   },
-
+  async updateProfile(userId: string, userData: UserUpdateData, token: string): Promise<User> {
+    return authRepository.updateProfile(userId, userData, token);
+  },
   async validateSession(req: NextRequest): Promise<User | null> {
     // Primeiro, tente obter o token do cabeçalho Authorization (para requisições vindas do cliente via fetch)
     const authHeader = req.headers.get('authorization');

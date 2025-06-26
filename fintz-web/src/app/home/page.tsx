@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/ui/Button';
+import Link from '@/components/ui/Link';
 
 export default function HomePage() {
   const { user, isAuthenticated, isLoading, logout } = useAuth();
@@ -35,6 +36,9 @@ export default function HomePage() {
       <p className="text-lg text-gray-600 mb-4">Seu email: {user?.email}</p>
       <p className="text-lg text-gray-600 mb-8">Seu celular: {user?.cell}</p>
       <Button onClick={logout}>Sair</Button>
+      <Link href="/profile" className='mt-2'>
+        <Button>Atualizar Perfil</Button>
+      </Link>
     </div>
   );
 }
