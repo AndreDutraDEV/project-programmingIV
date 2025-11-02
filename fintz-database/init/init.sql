@@ -1,45 +1,38 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Tempo de geração: 17/10/2025 às 04:15
--- Versão do servidor: 10.4.32-MariaDB
--- Versão do PHP: 8.2.12
+-- Inicia a transação
+BEGIN;
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
+-- --------------------------------------------------------
+-- Criação dos tipos ENUM personalizados (necessário no PostgreSQL)
+-- --------------------------------------------------------
 
+CREATE TYPE modalidade_enum AS ENUM ('Presencial', 'EAD', 'Híbrido', 'Semipresencial');
+CREATE TYPE sexo_enum AS ENUM ('Masculino', 'Feminino', 'Outro', 'Não Informado');
+CREATE TYPE titulacao_enum AS ENUM ('Graduado', 'Especialista', 'Mestre', 'Doutor', 'Pós-Doutor');
+CREATE TYPE tipo_sala_enum AS ENUM ('Sala de Aula', 'Laboratório', 'Auditório');
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Banco de dados: `bd2`
---
+-- --------------------------------------------------------
+-- Banco de dados: "bd2"
+-- --------------------------------------------------------
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `afinidade_professor`
+-- Estrutura para tabela "afinidade_professor"
 --
 
-CREATE TABLE `afinidade_professor` (
-  `id` int(11) NOT NULL,
-  `matricula_professor` varchar(20) NOT NULL,
-  `cod_disciplina` varchar(10) NOT NULL,
-  `data_inclusao` date DEFAULT NULL,
-  `data_encerramento` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE "afinidade_professor" (
+  "id" SERIAL NOT NULL, -- Alterado de int(11) para SERIAL
+  "matricula_professor" varchar(20) NOT NULL,
+  "cod_disciplina" varchar(10) NOT NULL,
+  "data_inclusao" date DEFAULT NULL,
+  "data_encerramento" date DEFAULT NULL
+);
 
 --
--- Despejando dados para a tabela `afinidade_professor`
+-- Despejando dados para a tabela "afinidade_professor"
 --
 
-INSERT INTO `afinidade_professor` (`id`, `matricula_professor`, `cod_disciplina`, `data_inclusao`, `data_encerramento`) VALUES
+INSERT INTO "afinidade_professor" ("id", "matricula_professor", "cod_disciplina", "data_inclusao", "data_encerramento") VALUES
 (600, 'P0001', 'D007', '2014-01-25', NULL),
 (601, 'P0001', 'D004', '2022-09-22', NULL),
 (602, 'P0002', 'D018', '2020-05-06', NULL),
@@ -141,21 +134,21 @@ INSERT INTO `afinidade_professor` (`id`, `matricula_professor`, `cod_disciplina`
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `aluno`
+-- Estrutura para tabela "aluno"
 --
 
-CREATE TABLE `aluno` (
-  `matricula` varchar(20) NOT NULL,
-  `cod_mec` int(11) NOT NULL,
-  `data_inicio` date DEFAULT NULL,
-  `cpf` char(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE "aluno" (
+  "matricula" varchar(20) NOT NULL,
+  "cod_mec" integer NOT NULL, -- Alterado de int(11)
+  "data_inicio" date DEFAULT NULL,
+  "cpf" char(11) NOT NULL
+);
 
 --
--- Despejando dados para a tabela `aluno`
+-- Despejando dados para a tabela "aluno"
 --
 
-INSERT INTO `aluno` (`matricula`, `cod_mec`, `data_inicio`, `cpf`) VALUES
+INSERT INTO "aluno" ("matricula", "cod_mec", "data_inicio", "cpf") VALUES
 ('A0001', 1002, '2019-04-09', '07337543303'),
 ('A0002', 1002, '2018-08-29', '67749649909'),
 ('A0003', 1002, '2019-03-01', '59401399049'),
@@ -360,21 +353,21 @@ INSERT INTO `aluno` (`matricula`, `cod_mec`, `data_inicio`, `cpf`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `curso`
+-- Estrutura para tabela "curso"
 --
 
-CREATE TABLE `curso` (
-  `cod_mec` int(11) NOT NULL,
-  `nome` varchar(255) NOT NULL,
-  `data_autorizacao` date DEFAULT NULL,
-  `modalidade` enum('Presencial','EAD','Híbrido','Semipresencial') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE "curso" (
+  "cod_mec" integer NOT NULL, -- Alterado de int(11)
+  "nome" varchar(255) NOT NULL,
+  "data_autorizacao" date DEFAULT NULL,
+  "modalidade" modalidade_enum NOT NULL -- Alterado para o tipo ENUM criado
+);
 
 --
--- Despejando dados para a tabela `curso`
+-- Despejando dados para a tabela "curso"
 --
 
-INSERT INTO `curso` (`cod_mec`, `nome`, `data_autorizacao`, `modalidade`) VALUES
+INSERT INTO "curso" ("cod_mec", "nome", "data_autorizacao", "modalidade") VALUES
 (1001, 'Ciência da Computação', '2010-03-15', 'Presencial'),
 (1002, 'Engenharia de Software', '2012-08-20', 'Presencial'),
 (1003, 'Sistemas de Informação', '2015-02-10', 'EAD'),
@@ -383,21 +376,21 @@ INSERT INTO `curso` (`cod_mec`, `nome`, `data_autorizacao`, `modalidade`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `disciplina`
+-- Estrutura para tabela "disciplina"
 --
 
-CREATE TABLE `disciplina` (
-  `cod_disciplina` varchar(10) NOT NULL,
-  `nome` varchar(255) NOT NULL,
-  `carga_horaria` int(11) DEFAULT NULL,
-  `ementa` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE "disciplina" (
+  "cod_disciplina" varchar(10) NOT NULL,
+  "nome" varchar(255) NOT NULL,
+  "carga_horaria" integer DEFAULT NULL, -- Alterado de int(11)
+  "ementa" text DEFAULT NULL
+);
 
 --
--- Despejando dados para a tabela `disciplina`
+-- Despejando dados para a tabela "disciplina"
 --
 
-INSERT INTO `disciplina` (`cod_disciplina`, `nome`, `carga_horaria`, `ementa`) VALUES
+INSERT INTO "disciplina" ("cod_disciplina", "nome", "carga_horaria", "ementa") VALUES
 ('D001', 'Programação I', 60, 'Ementa de Programação I (conteúdo simulado).'),
 ('D002', 'Programação II', 60, 'Ementa de Programação II (conteúdo simulado).'),
 ('D003', 'Estruturas de Dados', 90, 'Ementa de Estruturas de Dados (conteúdo simulado).'),
@@ -422,20 +415,20 @@ INSERT INTO `disciplina` (`cod_disciplina`, `nome`, `carga_horaria`, `ementa`) V
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `horario_aluno`
+-- Estrutura para tabela "horario_aluno"
 --
 
-CREATE TABLE `horario_aluno` (
-  `id` varchar(15) NOT NULL,
-  `matricula_aluno` varchar(20) NOT NULL,
-  `id_oferta_semestre` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE "horario_aluno" (
+  "id" varchar(15) NOT NULL,
+  "matricula_aluno" varchar(20) NOT NULL,
+  "id_oferta_semestre" integer NOT NULL -- Alterado de int(11)
+);
 
 --
--- Despejando dados para a tabela `horario_aluno`
+-- Despejando dados para a tabela "horario_aluno"
 --
 
-INSERT INTO `horario_aluno` (`id`, `matricula_aluno`, `id_oferta_semestre`) VALUES
+INSERT INTO "horario_aluno" ("id", "matricula_aluno", "id_oferta_semestre") VALUES
 ('H00001', 'A0001', 132),
 ('H00003', 'A0001', 136),
 ('H00002', 'A0001', 155),
@@ -1040,24 +1033,24 @@ INSERT INTO `horario_aluno` (`id`, `matricula_aluno`, `id_oferta_semestre`) VALU
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `oferta_semestre`
+-- Estrutura para tabela "oferta_semestre"
 --
 
-CREATE TABLE `oferta_semestre` (
-  `id` int(11) NOT NULL,
-  `semestre` varchar(8) NOT NULL,
-  `id_afinidade_professor` int(11) NOT NULL,
-  `codigo_sala` varchar(20) NOT NULL,
-  `dia_semana` char(3) DEFAULT NULL,
-  `horario_ini` time DEFAULT NULL,
-  `horario_fim` time DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE "oferta_semestre" (
+  "id" SERIAL NOT NULL, -- Alterado de int(11) para SERIAL
+  "semestre" varchar(8) NOT NULL,
+  "id_afinidade_professor" integer NOT NULL, -- Alterado de int(11)
+  "codigo_sala" varchar(20) NOT NULL,
+  "dia_semana" char(3) DEFAULT NULL,
+  "horario_ini" time DEFAULT NULL,
+  "horario_fim" time DEFAULT NULL
+);
 
 --
--- Despejando dados para a tabela `oferta_semestre`
+-- Despejando dados para a tabela "oferta_semestre"
 --
 
-INSERT INTO `oferta_semestre` (`id`, `semestre`, `id_afinidade_professor`, `codigo_sala`, `dia_semana`, `horario_ini`, `horario_fim`) VALUES
+INSERT INTO "oferta_semestre" ("id", "semestre", "id_afinidade_professor", "codigo_sala", "dia_semana", "horario_ini", "horario_fim") VALUES
 (119, '2025.1', 655, 'S09', 'Qui', '15:00:00', '16:00:00'),
 (120, '2025.1', 689, 'S09', 'Qui', '13:00:00', '15:00:00'),
 (121, '2025.1', 648, 'S06', 'Sex', '09:00:00', '11:00:00'),
@@ -1102,23 +1095,23 @@ INSERT INTO `oferta_semestre` (`id`, `semestre`, `id_afinidade_professor`, `codi
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `pessoa`
+-- Estrutura para tabela "pessoa"
 --
 
-CREATE TABLE `pessoa` (
-  `cpf` char(11) NOT NULL,
-  `nome` varchar(255) NOT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `sexo` enum('Masculino','Feminino','Outro','Não Informado') DEFAULT NULL,
-  `data_nascimento` date DEFAULT NULL,
-  `telefone` varchar(15) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE "pessoa" (
+  "cpf" char(11) NOT NULL,
+  "nome" varchar(255) NOT NULL,
+  "email" varchar(255) DEFAULT NULL,
+  "sexo" sexo_enum DEFAULT NULL, -- Alterado para o tipo ENUM criado
+  "data_nascimento" date DEFAULT NULL,
+  "telefone" varchar(15) DEFAULT NULL
+);
 
 --
--- Despejando dados para a tabela `pessoa`
+-- Despejando dados para a tabela "pessoa"
 --
 
-INSERT INTO `pessoa` (`cpf`, `nome`, `email`, `sexo`, `data_nascimento`, `telefone`) VALUES
+INSERT INTO "pessoa" ("cpf", "nome", "email", "sexo", "data_nascimento", "telefone") VALUES
 ('00025787298', 'Sofia Moreira', 'sofia.moreira102@exemplo.com', 'Não Informado', '1977-07-13', '983357939'),
 ('00330923271', 'Thiago Oliveira', 'thiago.oliveira158@exemplo.com', 'Outro', '2000-01-26', '911529494'),
 ('01043289861', 'Fernanda Rocha', 'fernanda.rocha9@exemplo.com', 'Feminino', '1989-09-10', '985141654'),
@@ -1373,21 +1366,21 @@ INSERT INTO `pessoa` (`cpf`, `nome`, `email`, `sexo`, `data_nascimento`, `telefo
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `professor`
+-- Estrutura para tabela "professor"
 --
 
-CREATE TABLE `professor` (
-  `matricula` varchar(20) NOT NULL,
-  `titulacao` enum('Graduado','Especialista','Mestre','Doutor','Pós-Doutor') NOT NULL,
-  `data_admissao` date DEFAULT NULL,
-  `cpf` char(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE "professor" (
+  "matricula" varchar(20) NOT NULL,
+  "titulacao" titulacao_enum NOT NULL, -- Alterado para o tipo ENUM criado
+  "data_admissao" date DEFAULT NULL,
+  "cpf" char(11) NOT NULL
+);
 
 --
--- Despejando dados para a tabela `professor`
+-- Despejando dados para a tabela "professor"
 --
 
-INSERT INTO `professor` (`matricula`, `titulacao`, `data_admissao`, `cpf`) VALUES
+INSERT INTO "professor" ("matricula", "titulacao", "data_admissao", "cpf") VALUES
 ('P0001', 'Graduado', '2016-10-30', '63854678544'),
 ('P0002', 'Mestre', '2023-12-27', '11047541212'),
 ('P0003', 'Pós-Doutor', '2002-03-07', '64752553419'),
@@ -1442,20 +1435,20 @@ INSERT INTO `professor` (`matricula`, `titulacao`, `data_admissao`, `cpf`) VALUE
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `salas`
+-- Estrutura para tabela "salas"
 --
 
-CREATE TABLE `salas` (
-  `codigo` varchar(20) NOT NULL,
-  `tipo` enum('Sala de Aula','Laboratório','Auditório') NOT NULL,
-  `capacidade` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE "salas" (
+  "codigo" varchar(20) NOT NULL,
+  "tipo" tipo_sala_enum NOT NULL, -- Alterado para o tipo ENUM criado
+  "capacidade" integer DEFAULT NULL -- Alterado de int(11)
+);
 
 --
--- Despejando dados para a tabela `salas`
+-- Despejando dados para a tabela "salas"
 --
 
-INSERT INTO `salas` (`codigo`, `tipo`, `capacidade`) VALUES
+INSERT INTO "salas" ("codigo", "tipo", "capacidade") VALUES
 ('S01', 'Sala de Aula', 80),
 ('S02', 'Laboratório', 40),
 ('S03', 'Laboratório', 80),
@@ -1467,129 +1460,123 @@ INSERT INTO `salas` (`codigo`, `tipo`, `capacidade`) VALUES
 ('S09', 'Sala de Aula', 60),
 ('S10', 'Sala de Aula', 50);
 
---
+-- --------------------------------------------------------
 -- Índices para tabelas despejadas
---
+-- --------------------------------------------------------
 
 --
--- Índices de tabela `afinidade_professor`
+-- Índices de tabela "afinidade_professor"
 --
-ALTER TABLE `afinidade_professor`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `matricula` (`matricula_professor`,`cod_disciplina`),
-  ADD KEY `cod_disciplina` (`cod_disciplina`);
+ALTER TABLE "afinidade_professor"
+  ADD PRIMARY KEY ("id"),
+  ADD CONSTRAINT "afinidade_professor_matricula_cod_disciplina_key" UNIQUE ("matricula_professor", "cod_disciplina"); -- Alterado de UNIQUE KEY
+CREATE INDEX "idx_afinidade_professor_cod_disciplina" ON "afinidade_professor" ("cod_disciplina"); -- Alterado de ADD KEY
 
 --
--- Índices de tabela `aluno`
+-- Índices de tabela "aluno"
 --
-ALTER TABLE `aluno`
-  ADD PRIMARY KEY (`matricula`),
-  ADD UNIQUE KEY `cpf` (`cpf`),
-  ADD KEY `cod_mec` (`cod_mec`);
+ALTER TABLE "aluno"
+  ADD PRIMARY KEY ("matricula"),
+  ADD CONSTRAINT "aluno_cpf_key" UNIQUE ("cpf"); -- Alterado de UNIQUE KEY
+CREATE INDEX "idx_aluno_cod_mec" ON "aluno" ("cod_mec"); -- Alterado de ADD KEY
 
 --
--- Índices de tabela `curso`
+-- Índices de tabela "curso"
 --
-ALTER TABLE `curso`
-  ADD PRIMARY KEY (`cod_mec`);
+ALTER TABLE "curso"
+  ADD PRIMARY KEY ("cod_mec");
 
 --
--- Índices de tabela `disciplina`
+-- Índices de tabela "disciplina"
 --
-ALTER TABLE `disciplina`
-  ADD PRIMARY KEY (`cod_disciplina`);
+ALTER TABLE "disciplina"
+  ADD PRIMARY KEY ("cod_disciplina");
 
 --
--- Índices de tabela `horario_aluno`
+-- Índices de tabela "horario_aluno"
 --
-ALTER TABLE `horario_aluno`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `matricula_aluno` (`matricula_aluno`,`id_oferta_semestre`),
-  ADD KEY `id_oferta_semestre` (`id_oferta_semestre`);
+ALTER TABLE "horario_aluno"
+  ADD PRIMARY KEY ("id"),
+  ADD CONSTRAINT "horario_aluno_matricula_aluno_id_oferta_semestre_key" UNIQUE ("matricula_aluno", "id_oferta_semestre"); -- Alterado de UNIQUE KEY
+CREATE INDEX "idx_horario_aluno_id_oferta_semestre" ON "horario_aluno" ("id_oferta_semestre"); -- Alterado de ADD KEY
 
 --
--- Índices de tabela `oferta_semestre`
+-- Índices de tabela "oferta_semestre"
 --
-ALTER TABLE `oferta_semestre`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_afinidade_professor` (`id_afinidade_professor`),
-  ADD KEY `codigo_sala` (`codigo_sala`);
+ALTER TABLE "oferta_semestre"
+  ADD PRIMARY KEY ("id");
+CREATE INDEX "idx_oferta_semestre_id_afinidade_professor" ON "oferta_semestre" ("id_afinidade_professor"); -- Alterado de ADD KEY
+CREATE INDEX "idx_oferta_semestre_codigo_sala" ON "oferta_semestre" ("codigo_sala"); -- Alterado de ADD KEY
 
 --
--- Índices de tabela `pessoa`
+-- Índices de tabela "pessoa"
 --
-ALTER TABLE `pessoa`
-  ADD PRIMARY KEY (`cpf`),
-  ADD UNIQUE KEY `email` (`email`);
+ALTER TABLE "pessoa"
+  ADD PRIMARY KEY ("cpf"),
+  ADD CONSTRAINT "pessoa_email_key" UNIQUE ("email"); -- Alterado de UNIQUE KEY
 
 --
--- Índices de tabela `professor`
+-- Índices de tabela "professor"
 --
-ALTER TABLE `professor`
-  ADD PRIMARY KEY (`matricula`),
-  ADD UNIQUE KEY `cpf` (`cpf`);
+ALTER TABLE "professor"
+  ADD PRIMARY KEY ("matricula"),
+  ADD CONSTRAINT "professor_cpf_key" UNIQUE ("cpf"); -- Alterado de UNIQUE KEY
 
 --
--- Índices de tabela `salas`
+-- Índices de tabela "salas"
 --
-ALTER TABLE `salas`
-  ADD PRIMARY KEY (`codigo`);
+ALTER TABLE "salas"
+  ADD PRIMARY KEY ("codigo");
 
---
+-- --------------------------------------------------------
 -- AUTO_INCREMENT para tabelas despejadas
---
+-- --------------------------------------------------------
 
 --
--- AUTO_INCREMENT de tabela `afinidade_professor`
+-- Ajusta as sequências para os valores corretos do dump
+-- A função setval(sequence_name, next_value, is_called)
+-- 'false' significa que o next_value será o próximo valor retornado.
 --
-ALTER TABLE `afinidade_professor`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=697;
+SELECT setval(pg_get_serial_sequence('"afinidade_professor"', 'id'), 697, false);
+SELECT setval(pg_get_serial_sequence('"oferta_semestre"', 'id'), 159, false);
 
---
--- AUTO_INCREMENT de tabela `oferta_semestre`
---
-ALTER TABLE `oferta_semestre`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=159;
-
---
+-- --------------------------------------------------------
 -- Restrições para tabelas despejadas
---
+-- --------------------------------------------------------
 
 --
--- Restrições para tabelas `afinidade_professor`
+-- Restrições para tabelas "afinidade_professor"
 --
-ALTER TABLE `afinidade_professor`
-  ADD CONSTRAINT `afinidade_professor_ibfk_1` FOREIGN KEY (`matricula_professor`) REFERENCES `professor` (`matricula`),
-  ADD CONSTRAINT `afinidade_professor_ibfk_2` FOREIGN KEY (`cod_disciplina`) REFERENCES `disciplina` (`cod_disciplina`);
+ALTER TABLE "afinidade_professor"
+  ADD CONSTRAINT "afinidade_professor_ibfk_1" FOREIGN KEY ("matricula_professor") REFERENCES "professor" ("matricula"),
+  ADD CONSTRAINT "afinidade_professor_ibfk_2" FOREIGN KEY ("cod_disciplina") REFERENCES "disciplina" ("cod_disciplina");
 
 --
--- Restrições para tabelas `aluno`
+-- Restrições para tabelas "aluno"
 --
-ALTER TABLE `aluno`
-  ADD CONSTRAINT `aluno_ibfk_1` FOREIGN KEY (`cod_mec`) REFERENCES `curso` (`cod_mec`),
-  ADD CONSTRAINT `aluno_ibfk_2` FOREIGN KEY (`cpf`) REFERENCES `pessoa` (`cpf`);
+ALTER TABLE "aluno"
+  ADD CONSTRAINT "aluno_ibfk_1" FOREIGN KEY ("cod_mec") REFERENCES "curso" ("cod_mec"),
+  ADD CONSTRAINT "aluno_ibfk_2" FOREIGN KEY ("cpf") REFERENCES "pessoa" ("cpf");
 
 --
--- Restrições para tabelas `horario_aluno`
+-- Restrições para tabelas "horario_aluno"
 --
-ALTER TABLE `horario_aluno`
-  ADD CONSTRAINT `horario_aluno_ibfk_1` FOREIGN KEY (`matricula_aluno`) REFERENCES `aluno` (`matricula`),
-  ADD CONSTRAINT `horario_aluno_ibfk_2` FOREIGN KEY (`id_oferta_semestre`) REFERENCES `oferta_semestre` (`id`);
+ALTER TABLE "horario_aluno"
+  ADD CONSTRAINT "horario_aluno_ibfk_1" FOREIGN KEY ("matricula_aluno") REFERENCES "aluno" ("matricula"),
+  ADD CONSTRAINT "horario_aluno_ibfk_2" FOREIGN KEY ("id_oferta_semestre") REFERENCES "oferta_semestre" ("id");
 
 --
--- Restrições para tabelas `oferta_semestre`
+-- Restrições para tabelas "oferta_semestre"
 --
-ALTER TABLE `oferta_semestre`
-  ADD CONSTRAINT `oferta_semestre_ibfk_1` FOREIGN KEY (`id_afinidade_professor`) REFERENCES `afinidade_professor` (`id`),
-  ADD CONSTRAINT `oferta_semestre_ibfk_2` FOREIGN KEY (`codigo_sala`) REFERENCES `salas` (`codigo`);
+ALTER TABLE "oferta_semestre"
+  ADD CONSTRAINT "oferta_semestre_ibfk_1" FOREIGN KEY ("id_afinidade_professor") REFERENCES "afinidade_professor" ("id"),
+  ADD CONSTRAINT "oferta_semestre_ibfk_2" FOREIGN KEY ("codigo_sala") REFERENCES "salas" ("codigo");
 
 --
--- Restrições para tabelas `professor`
+-- Restrições para tabelas "professor"
 --
-ALTER TABLE `professor`
-  ADD CONSTRAINT `professor_ibfk_1` FOREIGN KEY (`cpf`) REFERENCES `pessoa` (`cpf`);
+ALTER TABLE "professor"
+  ADD CONSTRAINT "professor_ibfk_1" FOREIGN KEY ("cpf") REFERENCES "pessoa" ("cpf");
+
+-- Finaliza a transação
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
